@@ -1,35 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { List, ListItem, ListItemText } from "@material-ui/core";
-
+import Suggestion from "./Suggestion";
 function App() {
+ 
   const [loaded, setLoaded] = useState(false);
   const [query, setQuery] = useState();
   const [result, setResult] = useState([]);
   const [source, setSource] = useState();
-  const [result1, setResult1] = useState();
+  const[result1,setResult1]=useState();
   const [destination, setDestination] = useState();
   const host =
     "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/";
   const headers = {
     "x-rapidapi-key": "e020bd1963msh1673b37a5bea532p1e43d3jsn622ad43e58de",
-    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com"
+    "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
   };
   const fetchApiCall = async (query) => {
     const response = await fetch(
       `${host}browsequotes/v1.0/US/USD/en-US/${source}/${destination}/2021-03-15?inboundpartialdate=2019-12-01`,
       {
         method: "GET",
-        headers: headers
+        headers: headers,
       }
     );
     //  setResult(await response.json());
-    const data = await response.json();
-
-    const { Carriers } = data;
-    const { Quotes } = data;
-    setResult(Quotes);
-    setResult1(Carriers);
-    setLoaded(true);
+     const data=await response.json();
+    
+     const {Carriers}=data;
+     
+      for(var i=0;i<Carriers.length;i++){
+        console.log(Carriers[i].Name);
+      }
   };
 
   function sourceEntry(event) {
@@ -86,11 +86,11 @@ function App() {
         {/* {console.log(typeof(result.Places))} */}
         {/* {console.log(result.Places)} */}
 
-        {/* {result.Quotes?result.Quotes.map((data)=>{
+  {/* {result.Quotes?result.Quotes.map((data)=>{
     return <h1>{data}</h1>
   }):null} */}
-
-        {/* {result1.map((data)=>{
+ 
+  {/* {result1.map((data)=>{
   return <h1>{data}</h1>
   })} */}
         <label htmlFor="destinationroot">Destination Root</label>
@@ -108,24 +108,17 @@ function App() {
         <button onClick={fetchApiCall} type="button">
           Click Me!
         </button>
-        {!loaded ? (
-          <h2>Application is loading...</h2>
-        ) : (
-          <List>
-            {result.map((item) => (
-              <ListItem>
-                <ListItemText
-                  primary={item.MinPrice}
-                  secondary={result1
-                    .filter((car) => {
-                      return car.CarrierId === item.OutboundLeg.CarrierIds[0];
-                    })
-                    .map((carrier) => carrier.Name)}
-                />
-              </ListItem>
-            ))}
-          </List>
-        )}
+        {!loaded?<h2>Application is loading...</h2>:
+      <List>
+      {items.map(item => (
+       <ListItem>
+         <ListItemText primary={item.email} secondary={item.first_name} />
+       </ListItem> 
+      ))}
+    </List>
+    }
+
+
       </div>
     </>
   );
